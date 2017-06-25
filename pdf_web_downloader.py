@@ -48,7 +48,7 @@ def download_file(url, filename, dest):
         uncompeleted_pdfs.append(dest+filename)
         print "downloading file \"{0}\"".format(filename)
         f = open(dest+filename, 'wb')
-        conts = urlopen(url)
+        conts = urlopen(url, timeout=5)
         f.write(conts.read())
         f.close()
         print "downloading file \"{0}\" finished".format(filename)
@@ -109,7 +109,7 @@ class LinkListManip(object):
             pdf_names = [p.split('/')[-1] for p in pdf_links]
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=8) as TPE:
-            TPE.map(download_file, pdf_links, pdf_names, dests, timeout=15)
+            TPE.map(download_file, pdf_links, pdf_names, dests, timeout=3)
 
         print "PDFs download complete, deleting failed downloads"
         #Remove downloading failures
